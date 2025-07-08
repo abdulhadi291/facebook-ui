@@ -99,16 +99,38 @@ class _PostViewState extends State<PostView> {
             itemCount: posts.length,
             itemBuilder: (context, index) {
               return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          'https://cdn-icons-png.flaticon.com/512/6858/6858504.png',
+                        ),
+                        radius: 20,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        "Abdul Hadi",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      "${posts[index]['content']}",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "${posts[index]['content']}",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.left,
                       ),
-                      textAlign: TextAlign.left,
                     ),
                   ),
                   SizedBox(
@@ -145,7 +167,11 @@ class _PostViewState extends State<PostView> {
                             Text("Share", style: TextStyle(color: Colors.grey)),
                       ),
                     ],
-                  )
+                  ),
+                  Divider(),
+                  SizedBox(
+                    height: 10,
+                  ),
                 ],
               );
             },

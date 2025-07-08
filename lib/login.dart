@@ -42,7 +42,10 @@ class Login extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Facebook"),
+          title: Text(
+            "Facebook",
+            style: TextStyle(color: Colors.white),
+          ),
           centerTitle: true,
           backgroundColor: Color.fromARGB(255, 0, 85, 196),
         ),
