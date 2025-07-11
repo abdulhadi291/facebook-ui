@@ -68,31 +68,6 @@ class _PostViewState extends State<PostView> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                icon: Icon(Icons.home),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.supervisor_account_rounded),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.video_collection_sharp),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.account_circle_rounded),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.dehaze_outlined),
-                onPressed: () {},
-              ),
-            ],
-          ),
           Divider(),
           TextField(
             controller: postContentController,
@@ -120,7 +95,10 @@ class _PostViewState extends State<PostView> {
           SizedBox(
             height: 20,
           ),
-          SingleChildScrollView(),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(),
+          ),
           Expanded(
               child: ListView.builder(
             itemCount: posts.length,
@@ -222,6 +200,10 @@ class _PostViewState extends State<PostView> {
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
             label: 'Friends',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.ondemand_video_outlined),
+            label: 'Video',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
