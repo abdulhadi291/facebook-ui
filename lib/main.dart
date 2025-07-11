@@ -1,4 +1,5 @@
 import 'package:facebook_ui/login.dart';
+import 'package:facebook_ui/post_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
