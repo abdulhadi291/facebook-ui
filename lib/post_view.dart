@@ -1,3 +1,4 @@
+import 'package:facebook_ui/widgets/customstory.dart';
 import 'package:flutter/material.dart';
 
 class PostView extends StatefulWidget {
@@ -9,29 +10,30 @@ class PostView extends StatefulWidget {
 
 class _PostViewState extends State<PostView> {
   TextEditingController postContentController = TextEditingController();
+  TextEditingController imageURLController = TextEditingController();
+
   List posts = [];
 
-  List<String> postImages = [
-    'https://upload.wikimedia.org/wikipedia/commons/7/70/Neeulm_Valley_AJK_%28Arang_Kel%29.jpg',
-    'https://i0.wp.com/stampedmoments.com/wp-content/uploads/2023/08/sonmarg-kashmir-2.jpg?fit=1024%2C576&ssl=1',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1QOKzEBqT5eyMm2vaCI-UlTi3NsVWLM8v6w&s',
-    'https://images.travelandleisureasia.com/wp-content/uploads/sites/3/2024/04/18152123/srinagar-1.jpeg?tr=w-480,f-jpg,pr-true'
-  ];
+  deletepost(index) {
+    posts.removeAt(index);
+    setState(() {});
+  }
 
-  var imageIndex = 0;
+  editPost(index, content, images) {
+    posts[index] = {
+      'content': content,
+      'images': [images],
+    };
+
+    setState(() {});
+  }
 
   addPost() {
     posts.add({
       'content': postContentController.text,
-      'images': [postImages[imageIndex]]
+      'images': [imageURLController.text],
     });
 
-    imageIndex++;
-    if (imageIndex >= postImages.length) {
-      imageIndex = 0;
-    }
-
-    postContentController.clear();
     setState(() {});
     print(posts);
   }
@@ -70,7 +72,6 @@ class _PostViewState extends State<PostView> {
         children: [
           Divider(),
           TextField(
-            controller: postContentController,
             decoration: InputDecoration(
               hintText: 'Whats on your mind..',
               prefixIcon: Padding(
@@ -87,7 +88,67 @@ class _PostViewState extends State<PostView> {
               suffixIcon: IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
-                  addPost();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Add Post'),
+                        content: Container(
+                          width: 400,
+                          height: 250,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextField(
+                                controller: postContentController,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                  labelText: 'Content',
+                                  hintText: 'Enter the content',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.grey[100],
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              TextField(
+                                controller: imageURLController,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                  labelText: 'URLs',
+                                  hintText: 'Enter the URLs',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.grey[100],
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ElevatedButton(
+                                    child: Text("Close"),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                  ),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        addPost();
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('Add'))
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
             ),
@@ -95,9 +156,112 @@ class _PostViewState extends State<PostView> {
           SizedBox(
             height: 20,
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(),
+          SizedBox(
+            height: 230,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              child: Row(
+                children: [
+                  // Create Story box
+                  Container(
+                    height: 400,
+                    width: 115,
+                    margin: EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(13),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.add_circle, color: Colors.blue),
+                          SizedBox(height: 5),
+                          Text("Create Story",
+                              style: TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Repeated Story tiles
+                  StoryCustomTile(
+                    profileImage:
+                        "https://cdn.pixabay.com/photo/2024/11/22/13/20/man-9216455_1280.jpg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2020/06/28/00/04/chicago-5347435_1280.jpg",
+                  ),
+                  StoryCustomTile(
+                    profileImage:
+                        "https://cdn.pixabay.com/photo/2023/08/15/09/21/camera-8191564_1280.jpg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2016/11/29/04/54/photographer-1867417_1280.jpg",
+                  ),
+                  StoryCustomTile(
+                    profileImage:
+                        "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2015/05/18/23/53/backpacker-772991_1280.jpg",
+                  ),
+                  StoryCustomTile(
+                    profileImage:
+                        "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2024/07/13/07/40/cars-8891625_1280.jpg",
+                  ),
+                  StoryCustomTile(
+                    profileImage:
+                        "https://cdn.pixabay.com/photo/2017/06/19/17/24/boy-2420289_1280.jpg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2020/10/14/03/18/man-5653200_1280.jpg",
+                  ),
+                  StoryCustomTile(
+                    profileImage:
+                        "https://cdn.pixabay.com/photo/2017/03/27/13/28/man-2178721_1280.jpg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2020/04/25/20/33/mountain-5092625_1280.jpg",
+                  ),
+                  StoryCustomTile(
+                    profileImage:
+                        "https://cdn.pixabay.com/photo/2016/03/27/17/40/road-1283230_1280.jpg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2016/11/18/19/39/beach-1836597_1280.jpg",
+                  ),
+                  StoryCustomTile(
+                    profileImage:
+                        "https://cdn.pixabay.com/photo/2024/11/08/05/28/man-9182458_1280.jpg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2020/05/29/08/54/beach-5234306_1280.jpg",
+                  ),
+                  StoryCustomTile(
+                    profileImage:
+                        "https://cdn.pixabay.com/photo/2023/08/15/09/21/camera-8191564_1280.jpg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2021/07/09/08/44/football-6398660_1280.jpg",
+                  ),
+                  StoryCustomTile(
+                    profileImage:
+                        "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2014/03/17/22/26/game-289470_1280.jpg",
+                  ),
+                  StoryCustomTile(
+                    profileImage:
+                        "https://cdn.pixabay.com/photo/2016/03/27/22/21/boy-1284509_1280.jpg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2023/10/23/17/03/audi-8336484_1280.jpg",
+                  ),
+                  StoryCustomTile(
+                    profileImage:
+                        "https://cdn.pixabay.com/photo/2023/05/03/10/20/man-7967210_1280.jpg",
+                    storyImage:
+                        "https://cdn.pixabay.com/photo/2016/11/21/15/08/playstation-1845880_1280.jpg",
+                  ),
+                  //
+                ],
+              ),
+            ),
           ),
           Expanded(
               child: ListView.builder(
@@ -122,6 +286,85 @@ class _PostViewState extends State<PostView> {
                           fontSize: 16,
                         ),
                       ),
+                      SizedBox(width: 160),
+                      IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Edit Post'),
+                                  content: Container(
+                                    width: 400,
+                                    height: 250,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        TextField(
+                                          controller: postContentController,
+                                          decoration: InputDecoration(
+                                            labelText: 'Content',
+                                            hintText: 'Enter the content',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            filled: true,
+                                            fillColor: Colors.grey[100],
+                                          ),
+                                        ),
+                                        SizedBox(height: 20),
+                                        TextField(
+                                          controller: imageURLController,
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'URLs',
+                                            hintText: 'Enter the URLs',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            filled: true,
+                                            fillColor: Colors.grey[100],
+                                          ),
+                                        ),
+                                        SizedBox(height: 20),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            ElevatedButton(
+                                              child: Text("Close"),
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
+                                            ),
+                                            ElevatedButton(
+                                                onPressed: () {
+                                                  editPost(
+                                                      index,
+                                                      postContentController
+                                                          .text,
+                                                      imageURLController.text);
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Edit'))
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          icon: Icon(Icons.edit)),
+                      IconButton(
+                          onPressed: () {
+                            deletepost(index);
+                          },
+                          icon: Icon(Icons.delete)),
                     ],
                   ),
                   Container(
